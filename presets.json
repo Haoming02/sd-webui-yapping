@@ -1,0 +1,9 @@
+{
+    "txt2img": {},
+    "img2img": {
+        "upscale": {
+            "img2img_width": 2048,
+            "img2img_height": 2048
+        }
+    }
+}
