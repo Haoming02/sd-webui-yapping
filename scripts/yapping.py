@@ -1,13 +1,17 @@
-from modules import scripts
+from modules import scripts, script_callbacks
+from scripts.yap_json import load_presets
 import gradio as gr
 
-VALID_COMPONENTS: dict[str, gr.components.Component] = {
-    "txt2img_width": None,
-    "txt2img_height": None,
-    "img2img_width": None,
-    "img2img_height": None,
-    # "selected_scale_tab"
-}
+
+TXT2IMG_PRESETS: dict[str, dict] = None
+IMG2IMG_PRESETS: dict[str, dict] = None
+REQUIRED_COMPONENTS: list[str] = None
+VALID_COMPONENTS: dict[str, gr.components.Component] = {}
+
+
+def init():
+    global TXT2IMG_PRESETS, IMG2IMG_PRESETS, REQUIRED_COMPONENTS
+    TXT2IMG_PRESETS, IMG2IMG_PRESETS, REQUIRED_COMPONENTS = load_presets()
 
 
 class Yapping(scripts.Script):
@@ -21,21 +25,33 @@ class Yapping(scripts.Script):
     def after_component(self, component, **kwargs):
         ID: str = kwargs.get("elem_id", None)
 
-        if ID and ID in VALID_COMPONENTS.keys():
+        if ID in REQUIRED_COMPONENTS:
             VALID_COMPONENTS.update({ID: component})
 
     def ui(self, is_img2img):
+        PRESETS = IMG2IMG_PRESETS if is_img2img else TXT2IMG_PRESETS
 
-        with gr.Blocks():
-            btn = gr.Button("Max")
+        with gr.Row(elem_classes=["yapping_row"]):
 
-            btn.click(
-                fn=lambda: [2048, 2048],
-                inputs=None,
-                outputs=[
-                    VALID_COMPONENTS.get("txt2img_width"),
-                    VALID_COMPONENTS.get("txt2img_height"),
-                ],
-            )
+            for preset_name, preset_contents in PRESETS.items():
+
+                target_components: list[str] = [
+                    VALID_COMPONENTS[elem_id] for elem_id in preset_contents.keys()
+                ]
+
+                def apply_presets(preset: str):
+                    target_values: list[object] = PRESETS[preset].values()
+                    return list(target_values)
+
+                btn = gr.Button(preset_name, size="sm", elem_classes=["yapping_btn"])
+                btn.click(
+                    fn=apply_presets,
+                    inputs=[btn],
+                    outputs=target_components,
+                    show_progress="hidden",
+                )
 
         return None
+
+
+script_callbacks.on_before_ui(init)

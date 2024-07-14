@@ -1,11 +1,11 @@
-from modules import scripts, script_callbacks
+from modules import scripts
 import json
 import os
 
 PRESET_FILE = os.path.join(scripts.basedir(), "presets.json")
 
 
-def load_presets():
+def load_presets() -> tuple[dict, dict, list[str]]:
     with open(PRESET_FILE, "r", encoding="utf-8") as preset:
         DATA: dict = json.load(preset)
 
@@ -21,7 +21,4 @@ def load_presets():
         for elem in configs.keys():
             elem_ids.add(elem)
 
-    print(elem_ids)
-
-
-script_callbacks.on_before_ui(load_presets)
+    return t2i, i2i, elem_ids

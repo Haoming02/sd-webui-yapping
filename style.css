@@ -1,0 +1,14 @@
+.yapping_row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    background-color: var(--background-fill-secondary);
+    border-radius: 8px !important;
+}
+
+.yapping_btn {
+    flex: none !important;
+    border-radius: 8px !important;
+    margin: 0.5em !important;
+}
