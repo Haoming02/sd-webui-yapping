@@ -28,8 +28,24 @@ class Yapping(scripts.Script):
         if ID in REQUIRED_COMPONENTS:
             VALID_COMPONENTS.update({ID: component})
 
+    @staticmethod
+    def validate_components(presets: dict):
+        for name, preset in presets.items():
+            keys = list(preset.keys())
+            for elem in keys:
+                if elem not in VALID_COMPONENTS.keys():
+                    print(
+                        f'\n[Yapping] Component with elem_id "{elem}" in preset "{name}" not found...\n'
+                    )
+                    del preset[elem]
+
     def ui(self, is_img2img):
         PRESETS = IMG2IMG_PRESETS if is_img2img else TXT2IMG_PRESETS
+        Yapping.validate_components(PRESETS)
+
+        def apply_presets(preset: str):
+            target_values: list[object] = PRESETS[preset].values()
+            return list(target_values)
 
         with gr.Row(elem_classes=["yapping_row"]):
 
@@ -38,10 +54,6 @@ class Yapping(scripts.Script):
                 target_components: list[str] = [
                     VALID_COMPONENTS[elem_id] for elem_id in preset_contents.keys()
                 ]
-
-                def apply_presets(preset: str):
-                    target_values: list[object] = PRESETS[preset].values()
-                    return list(target_values)
 
                 btn = gr.Button(preset_name, size="sm", elem_classes=["yapping_btn"])
                 btn.click(

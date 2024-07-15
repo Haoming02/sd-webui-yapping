@@ -18,13 +18,23 @@ def load_presets() -> tuple[dict, dict, list[str]]:
     elem_ids = set()
 
     t2i: dict[str, dict] = DATA.get("txt2img", {})
-    for configs in t2i.values():
+    for btn, configs in t2i.items():
         for elem in configs.keys():
             elem_ids.add(elem)
 
+            if "img2img" in elem:
+                print(
+                    f'\n[Yapping]: img2img component "{elem}" found in txt2img preset "{btn}"...?\n'
+                )
+
     i2i: dict[str, dict] = DATA.get("img2img", {})
-    for configs in i2i.values():
+    for btn, configs in i2i.items():
         for elem in configs.keys():
             elem_ids.add(elem)
+
+            if "txt2img" in elem:
+                print(
+                    f'\n[Yapping]: txt2img component "{elem}" found in img2img preset "{btn}"...?\n'
+                )
 
     return t2i, i2i, elem_ids
