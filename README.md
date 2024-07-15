@@ -57,7 +57,11 @@ To find the `elem_id` of a parameter, right click on the field and click `Inspec
 
 ## Roadmap
 - [X] Implement error handling for invalid `elem_id`
+- [ ] A way to edit the Presets within Webui
+
+## Pain...
 - [ ] Support Gradio.Tab
     - **eg.** `img2img`/`Inpaint`/`etc.` and `Resize to`/`Resize by` in **img2img**
-    - *This might still require JavaScript...*
-- [ ] A way to edit the Presets within Webui
+    - This **will** require JavaScript...
+- [ ] Add ways to trigger Preset
+    - This **will** require JavaScript...
