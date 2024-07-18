@@ -25,43 +25,77 @@ Example Buttons<br>
 (used with <a href="https://github.com/Haoming02/sd-webui-tabs-extension">Tabs Extension</a>)
 </p>
 
-#### Main Advantage over other Implementations
 As mentioned in the *holy **yapping*** above, this Extension finds the fields during the UI setup process via Python, and uses the Gradio button events to change the parameters.
 
-No more trying to query elements using JavaScript; no more hacky workaround to change element values; no more clashing due to identical field name.
+Thus, no more trying to query elements using JavaScript; no more hacky workaround to change element values; no more clashing due to identical field name.
 
 ## How to Use
-On a fresh install, the Extension will automatically rename `example.json` to `presets.json`, to avoid overriding users' presets.
 
-- Within the `presets.json` file:
-    - There are 2 entries, `txt2img` and `img2img`, representing the mode that the buttons will show up in.
+> On a fresh install, the Extension will automatically rename `example.json` to `presets.json`, to avoid overriding users' existing presets
 
-- Inside each mode:
-    - You can have multiple entries. Each entry is a preset button, where the <ins>key</ins> is the name of the button.
+Within the `presets.json` file, there are 3 objects, `txt2img`, `img2img`, and `triggers`.
 
-- Under each button:
-    - Add <ins>key-value</ins> pairs of the parameter field `elem_id` and the value to set to.
+The **txt2img** and **img2img** objects are responsible for the **Preset** buttons:
 
-> Refer to the `presets.json` for included examples and formats
+- Start with a <ins>key</ins>, which will become the name of the button. This is also the name used by the **triggers** below.
 
-#### Parameters
-Listed below are some `elem_id` that were tested and confirmed to work.
+- Then, open into an object that contains multiple <ins>key-value</ins> pairs. Each pair consists of the `elem_id` of the field, and the value to set the parameter to.
 
-In theory, most parameters should work as long as they are Gradio components and were defined with an unique `elem_id` properly, even for ones from Extensions.
+The **triggers** object is responsible for hooking **Preset** to other buttons present in the Webui.
 
-> **txt2img:** `txt2img_sampling`, `txt2img_width`, `txt2img_height`, `txt2img_steps`, `txt2img_cfg_scale`
+- The <ins>key</ins> is the `elem_id` of the button
+- The <ins>value</ins> is in the format of `{tab}-{preset}`, where `{tab}` is either `t2i` or `i2i`, referring to the mode the preset was defined in; while `{preset}` is the name of the **Preset** to trigger.
 
-> **img2img:** `img2img_sampling`, `img2img_width`, `img2img_height`, `img2img_steps`, `img2img_cfg_scale`, `img2img_denoising_strength`
+#### Examples
+- The following will add a button called `portrait` to the `txt2img` tab that when clicked, sets the `width` and `height` to `896` and `1152` respectively
 
-To find the `elem_id` of a parameter, right click on the field and click `Inspect Element`, then look through the parent `<div>`s until you can find a descriptive `id`. *(**Note:** Some fields may not have an `elem_id`)*
+    ```json
+    "txt2img": {
+        "portrait": {
+            "txt2img_width": 896,
+            "txt2img_height": 1152
+        }
+    }
+    ```
+
+- The following will trigger the `upscale` preset defined in `img2img` tab, when the `Send to img2img` button in the `txt2img` tab is clicked
+
+    ```json
+    "triggers": {
+        "txt2img_send_to_img2img": "i2i-upscale",
+    }
+    ```
+
+> Refer to the `presets.json` for more included examples
+
+<details>
+<summary><b>elem_id</b></summary>
+
+To find the `elem_id` of a parameter, right click on the field and click `Inspect Element`, then look through the parent elements until you can find a descriptive `id`.
+
+Most parameters should work, as long as they are Gradio components defined with unique `elem_id` properly, even ones from other Extensions.
+
+Listed below are some built-in `elem_id` that were tested and confirmed to work:
+
+- `txt2img_sampling`
+- `txt2img_width`
+- `txt2img_height`
+- `txt2img_steps`
+- `txt2img_cfg_scale`
+- `img2img_sampling`
+- `img2img_width`
+- `img2img_height`
+- `img2img_steps`
+- `img2img_cfg_scale`
+- `img2img_denoising_strength`
+- `txt2img_send_to_img2img`
+- `img2img_send_to_inpaint`
+
+</details>
 
 ## Roadmap
 - [X] Implement error handling for invalid `elem_id`
-- [ ] A way to edit the Presets within Webui
-
-## Pain...
+- [X] Add a way to trigger a Preset from a built-in Button
+- [ ] Add a way to edit the Presets within the Webui
 - [ ] Support Gradio.Tab
-    - **eg.** `img2img`/`Inpaint`/`etc.` and `Resize to`/`Resize by` in **img2img**
-    - This **will** require JavaScript...
-- [ ] Add ways to trigger Preset
-    - This **will** require JavaScript...
+    - *Pending PR: [#16218](https://github.com/AUTOMATIC1111/stable-diffusion-webui/pull/16218)*
