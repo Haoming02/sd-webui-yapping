@@ -1,3 +1,6 @@
+import gradio as gr
+
+
 def validate_presets(valid_components: dict, presets: dict):
     for name, configs in presets.items():
         components = list(configs.keys())
@@ -37,9 +40,15 @@ def apply_presets(
     validate_triggers(valid_components, t2i_presets, t2i_triggers)
     validate_triggers(valid_components, i2i_presets, i2i_triggers)
 
+    TABS: dict[str, int] = {}
+
     def apply_presets_t2i(preset: str):
-        target_values: list[object] = t2i_presets[preset].values()
-        return list(target_values)
+        target_values = list(t2i_presets[preset].values())
+        idx = TABS.get(preset, None)
+        if idx is not None:
+            target_values[idx] = gr.update(selected=target_values[idx])
+
+        return target_values
 
     for name, configs in t2i_presets.items():
         BUTTON = t2i_buttons[name]
@@ -47,6 +56,10 @@ def apply_presets(
         target_components: list[str] = [
             valid_components[elem_id] for elem_id in configs.keys()
         ]
+
+        for i, comp in enumerate(target_components):
+            if isinstance(comp, gr.layouts.tabs.Tabs):
+                TABS[name] = i
 
         BUTTON.click(
             fn=apply_presets_t2i,
@@ -64,8 +77,12 @@ def apply_presets(
             )
 
     def apply_presets_i2i(preset: str):
-        target_values: list[object] = i2i_presets[preset].values()
-        return list(target_values)
+        target_values = list(i2i_presets[preset].values())
+        idx = TABS.get(preset, None)
+        if idx is not None:
+            target_values[idx] = gr.update(selected=target_values[idx])
+
+        return target_values
 
     for name, configs in i2i_presets.items():
         BUTTON = i2i_buttons[name]
@@ -73,6 +90,10 @@ def apply_presets(
         target_components: list[str] = [
             valid_components[elem_id] for elem_id in configs.keys()
         ]
+
+        for i, comp in enumerate(target_components):
+            if isinstance(comp, gr.layouts.tabs.Tabs):
+                TABS[name] = i
 
         BUTTON.click(
             fn=apply_presets_i2i,

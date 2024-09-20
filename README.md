@@ -33,20 +33,20 @@ Thus, no more trying to query elements using JavaScript; no more hacky workaroun
 
 > On a fresh install, the Extension will automatically rename `example.json` to `presets.json`, to avoid overriding users' existing presets
 
-Within the `presets.json` file, there are 3 objects, `txt2img`, `img2img`, and `triggers`.
+Within the `presets.json` file, there are 3 objects, `txt2img`, `img2img`, and `triggers`:
 
-The **txt2img** and **img2img** objects are responsible for the **Preset** buttons:
+- The **txt2img** and **img2img** objects are responsible for the **Preset** buttons:
 
-- Start with a <ins>key</ins>, which will become the name of the button. This is also the name used by the **triggers** below.
+    - Start with a <ins>key</ins>, which will become the name of the button. This is also the name used by the **triggers** below.
 
-> If the `key` contains the phrase "sep", it will become a separator instead, placing buttons above and below it into different rows
+        > If the `key` contains the phrase "sep", it will become a separator instead, placing buttons above and below it into different rows
 
-- Then, open into an object that contains multiple <ins>key-value</ins> pairs. Each pair consists of the `elem_id` of the field, and the value to set the parameter to.
+    - Then, open into an object that contains multiple <ins>key-value</ins> pairs. Each pair consists of the `elem_id` of the field, and the value to set the parameter to.
 
-The **triggers** object is responsible for hooking **Preset** to other buttons present in the Webui.
+- The **triggers** object is responsible for hooking **Preset** to other buttons present in the Webui.
 
-- The <ins>key</ins> is the `elem_id` of the button
-- The <ins>value</ins> is in the format of `{tab}-{preset}`, where `{tab}` is either `t2i` or `i2i`, referring to the mode the preset was defined in; while `{preset}` is the name of the **Preset** to trigger.
+    - The <ins>key</ins> is the `elem_id` of the button
+    - The <ins>value</ins> is in the format of `{tab}-{preset}`, where `{tab}` is either `t2i` or `i2i`, referring to the mode the preset was defined in; while `{preset}` is the name of the **Preset** to trigger.
 
 #### Examples
 - The following will add a button called `portrait` to the `txt2img` tab that when clicked, sets the `width` and `height` to `896` and `1152` respectively
@@ -92,12 +92,12 @@ Listed below are some built-in `elem_id` that were tested and confirmed to work:
 - `img2img_denoising_strength`
 - `txt2img_send_to_img2img`
 - `img2img_send_to_inpaint`
+- `img2img_tabs_resize`
 
 </details>
 
 ## Roadmap
 - [X] Implement error handling for invalid `elem_id`
 - [X] Add a way to trigger a Preset from a built-in Button
+- [X] Support Gradio.Tab
 - [ ] Add a way to edit the Presets within the Webui
-- [ ] Support Gradio.Tab
-    - *Pending PR: [#16218](https://github.com/AUTOMATIC1111/stable-diffusion-webui/pull/16218)*
