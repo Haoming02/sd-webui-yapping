@@ -24,6 +24,7 @@
             "img2img_cfg_scale": 6.0,
             "img2img_denoising_strength": 0.4
         },
+        "sep01": {},
         "upscale": {
             "img2img_sampling": "DPM++ 2M Karras",
             "img2img_width": 1536,

@@ -23,6 +23,9 @@ def load_presets() -> tuple[dict, dict, set[str]]:
 
     t2i: dict[str, dict] = DATA.get("txt2img", {})
     for btn, configs in t2i.items():
+        if "sep" in btn:
+            continue
+
         for elem in configs.keys():
             elem_ids.add(elem)
 
@@ -31,6 +34,9 @@ def load_presets() -> tuple[dict, dict, set[str]]:
 
     i2i: dict[str, dict] = DATA.get("img2img", {})
     for btn, configs in i2i.items():
+        if "sep" in btn:
+            continue
+
         for elem in configs.keys():
             elem_ids.add(elem)
 

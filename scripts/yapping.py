@@ -65,6 +65,20 @@ class Yapping(scripts.Script):
             HOOKED_COMPONENTS.append(ID)
             Yapping.try_apply()
 
+    @staticmethod
+    def _presets_separators(preset: dict) -> list[dict]:
+        items = list(preset.items())
+        presets = [{}]
+
+        for k, v in items:
+            if "sep" not in k:
+                presets[-1].update({k: v})
+            else:
+                del preset[k]
+                presets.append({})
+
+        return presets
+
     def ui(self, is_img2img):
         presets: dict = IMG2IMG_PRESETS if is_img2img else TXT2IMG_PRESETS
         buttons: dict = IMG2IMG_BUTTONS if is_img2img else TXT2IMG_BUTTONS
@@ -72,11 +86,13 @@ class Yapping(scripts.Script):
         if not presets:
             return None
 
-        with gr.Row(elem_classes=["yapping_row"]):
+        for preset in self._presets_separators(presets):
 
-            for name in presets.keys():
-                btn = gr.Button(name, size="sm", elem_classes=["yapping_btn"])
-                buttons.update({name: btn})
+            with gr.Row(elem_classes=["yapping_row"]):
+
+                for name in preset.keys():
+                    btn = gr.Button(name, size="sm", elem_classes=["yapping_btn"])
+                    buttons.update({name: btn})
 
         Yapping.try_apply()
         return None

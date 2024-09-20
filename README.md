@@ -39,6 +39,8 @@ The **txt2img** and **img2img** objects are responsible for the **Preset** butto
 
 - Start with a <ins>key</ins>, which will become the name of the button. This is also the name used by the **triggers** below.
 
+> If the `key` contains the phrase "sep", it will become a separator instead, placing buttons above and below it into different rows
+
 - Then, open into an object that contains multiple <ins>key-value</ins> pairs. Each pair consists of the `elem_id` of the field, and the value to set the parameter to.
 
 The **triggers** object is responsible for hooking **Preset** to other buttons present in the Webui.

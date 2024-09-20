@@ -37,11 +37,6 @@ def apply_presets(
     validate_triggers(valid_components, t2i_presets, t2i_triggers)
     validate_triggers(valid_components, i2i_presets, i2i_triggers)
 
-    if (preset_count := len(t2i_presets) + len(i2i_presets)) > 0:
-        print(f"[Yapping] Hooked {preset_count} Presets")
-    if (trigger_count := len(t2i_triggers) + len(i2i_triggers)) > 0:
-        print(f"[Yapping] Hooked {trigger_count} Triggers")
-
     def apply_presets_t2i(preset: str):
         target_values: list[object] = t2i_presets[preset].values()
         return list(target_values)
@@ -93,3 +88,8 @@ def apply_presets(
                 outputs=target_components,
                 show_progress="hidden",
             )
+
+    if (preset_count := len(t2i_presets) + len(i2i_presets)) > 0:
+        print(f"[Yapping] Hooked {preset_count} Presets")
+    if (trigger_count := len(t2i_triggers) + len(i2i_triggers)) > 0:
+        print(f"[Yapping] Hooked {trigger_count} Triggers")
