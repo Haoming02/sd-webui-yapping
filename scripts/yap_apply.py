@@ -1,5 +1,10 @@
 import gradio as gr
 
+try:
+    from gradio.layouts.tabs import Tabs
+except ImportError:
+    from gradio.layouts import Tabs
+
 
 def validate_presets(valid_components: dict, presets: dict):
     for name, configs in presets.items():
@@ -58,7 +63,7 @@ def apply_presets(
         ]
 
         for i, comp in enumerate(target_components):
-            if isinstance(comp, gr.layouts.tabs.Tabs):
+            if isinstance(comp, Tabs):
                 TABS[name] = i
 
         BUTTON.click(
@@ -92,7 +97,7 @@ def apply_presets(
         ]
 
         for i, comp in enumerate(target_components):
-            if isinstance(comp, gr.layouts.tabs.Tabs):
+            if isinstance(comp, Tabs):
                 TABS[name] = i
 
         BUTTON.click(
