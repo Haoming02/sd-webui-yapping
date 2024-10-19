@@ -1,10 +1,24 @@
-.yapping_row {
+.yapping_col {
+    gap: 0px !important;
+}
+
+.yapping_col .yapping_row {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-content: center;
     background-color: var(--background-fill-secondary);
-    border-radius: 8px !important;
+    border-radius: 0px !important;
+}
+
+.yapping_col .yapping_row:first-child {
+    border-top-left-radius: 8px !important;
+    border-top-right-radius: 8px !important;
+}
+
+.yapping_col .yapping_row:last-child {
+    border-bottom-left-radius: 8px !important;
+    border-bottom-right-radius: 8px !important;
 }
 
 .yapping_btn {

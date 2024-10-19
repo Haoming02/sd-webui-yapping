@@ -86,13 +86,14 @@ class Yapping(scripts.Script):
         if not presets:
             return None
 
-        for preset in self._presets_separators(presets):
+        with gr.Column(elem_classes=["yapping_col"]):
+            for preset in self._presets_separators(presets):
 
-            with gr.Row(elem_classes=["yapping_row"]):
+                with gr.Row(elem_classes=["yapping_row"]):
 
-                for name in preset.keys():
-                    btn = gr.Button(name, size="sm", elem_classes=["yapping_btn"])
-                    buttons.update({name: btn})
+                    for name in preset.keys():
+                        btn = gr.Button(name, size="sm", elem_classes=["yapping_btn"])
+                        buttons.update({name: btn})
 
         Yapping.try_apply()
         return None
