@@ -1,5 +1,5 @@
 from scripts.yap_json import load_init, load_presets, load_triggers
-from scripts.yap_apply import apply_presets
+from scripts.yap_apply import apply_presets, reset
 
 from modules import scripts, script_callbacks
 import gradio as gr
@@ -100,6 +100,7 @@ class Yapping(scripts.Script):
 
 
 def init():
+    reset()
     load_init()
 
     global TXT2IMG_PRESETS, IMG2IMG_PRESETS, REQUIRED_ELEMENTS

@@ -126,3 +126,8 @@ def apply_presets(
     if (trigger_count := len(t2i_triggers) + len(i2i_triggers)) > 0:
         print(f"[Yapping] Hooked {trigger_count} Triggers")
     HOOKED = True
+
+
+def reset():
+    global HOOKED
+    HOOKED = False
