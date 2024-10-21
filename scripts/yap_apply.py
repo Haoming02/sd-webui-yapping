@@ -5,6 +5,8 @@ try:
 except ImportError:
     from gradio.layouts import Tabs
 
+HOOKED: bool = False
+
 
 def validate_presets(valid_components: dict, presets: dict):
     for name, configs in presets.items():
@@ -40,6 +42,10 @@ def apply_presets(
     t2i_triggers: dict,
     i2i_triggers: dict,
 ):
+    global HOOKED
+    if HOOKED:
+        return
+
     validate_presets(valid_components, t2i_presets)
     validate_presets(valid_components, i2i_presets)
     validate_triggers(valid_components, t2i_presets, t2i_triggers)
@@ -119,3 +125,4 @@ def apply_presets(
         print(f"[Yapping] Hooked {preset_count} Presets")
     if (trigger_count := len(t2i_triggers) + len(i2i_triggers)) > 0:
         print(f"[Yapping] Hooked {trigger_count} Triggers")
+    HOOKED = True
