@@ -1,9 +1,8 @@
-from scripts.yap_json import load_init, load_presets, load_triggers
-from scripts.yap_apply import apply_presets, reset
-
-from modules import scripts, script_callbacks
 import gradio as gr
 
+from modules import script_callbacks, scripts
+from scripts.yap_apply import apply_presets, reset
+from scripts.yap_json import load_init, load_presets, load_triggers
 
 VALID_COMPONENTS: dict[str, gr.components.Component] = {}
 

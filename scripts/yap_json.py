@@ -1,6 +1,7 @@
-from modules import scripts
 import json
 import os
+
+from modules import scripts
 
 SAMPLE_FILE = os.path.join(scripts.basedir(), "example.json")
 PRESET_FILE = os.path.join(scripts.basedir(), "presets.json")
