@@ -48,22 +48,6 @@ class Yapping(scripts.Script):
             i2i_triggers=IMG2IMG_TRIGGERS,
         )
 
-    def after_component(self, component, **kwargs):
-        ID: str = kwargs.get("elem_id", None)
-        if not ID:
-            return
-
-        if ID in REQUIRED_ELEMENTS:
-            VALID_COMPONENTS.update({ID: component})
-            HOOKED_COMPONENTS.append(ID)
-            Yapping.try_apply()
-
-        elif ID in REQUIRED_BUTTONS:
-            assert isinstance(component, gr.Button)
-            VALID_COMPONENTS.update({ID: component})
-            HOOKED_COMPONENTS.append(ID)
-            Yapping.try_apply()
-
     @staticmethod
     def _presets_separators(preset: dict) -> list[dict]:
         items = list(preset.items())
@@ -109,4 +93,22 @@ def init():
     TXT2IMG_TRIGGERS, IMG2IMG_TRIGGERS, REQUIRED_BUTTONS = load_triggers()
 
 
+def after_component(component, **kwargs):
+    ID: str = kwargs.get("elem_id", None)
+    if not ID:
+        return
+
+    if ID in REQUIRED_ELEMENTS:
+        VALID_COMPONENTS.update({ID: component})
+        HOOKED_COMPONENTS.append(ID)
+        Yapping.try_apply()
+
+    elif ID in REQUIRED_BUTTONS:
+        assert isinstance(component, gr.Button)
+        VALID_COMPONENTS.update({ID: component})
+        HOOKED_COMPONENTS.append(ID)
+        Yapping.try_apply()
+
+
 script_callbacks.on_before_ui(init)
+script_callbacks.on_after_component(after_component)
