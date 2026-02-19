@@ -1,12 +1,12 @@
 import json
-import os
+import os.path
 
 from modules import scripts
 
 SAMPLE_FILE = os.path.join(scripts.basedir(), "example.json")
 PRESET_FILE = os.path.join(scripts.basedir(), "presets.json")
 
-DATA: dict = None
+DATA: dict[str, dict] = None
 
 
 def load_init():
@@ -59,7 +59,7 @@ def load_triggers() -> tuple[dict, dict, set[str]]:
         try:
             mode, event = moe.split("-")
         except ValueError:
-            print(f'\n[Yapping]: Invalid mode-event "{moe}" in triggers...!\n')
+            print(f'\n[Yapping]: Invalid mode-event "{moe}" in triggers...\n')
             continue
 
         btn_ids.add(btn)

@@ -13,7 +13,7 @@ def validate_presets(valid_components: dict, presets: dict):
         components = list(configs.keys())
 
         for elem_id in components:
-            if elem_id not in valid_components.keys():
+            if elem_id not in valid_components:
                 print(f'\n[Yapping] elem_id "{elem_id}" for "{name}" not found...\n')
                 del configs[elem_id]
 
@@ -22,13 +22,13 @@ def validate_triggers(valid_components: dict, presets: dict, triggers: dict):
     events = list(triggers.keys())
 
     for event in events:
-        if event not in presets.keys():
+        if event not in presets:
             print(f'\n[Yapping] Event "{event}" not found...\n')
             del triggers[event]
             continue
 
         btn = triggers[event]
-        if btn not in valid_components.keys():
+        if btn not in valid_components:
             print(f'\n[Yapping] Button with elem_id "{btn}" not found...\n')
             del triggers[event]
 
@@ -55,14 +55,16 @@ def apply_presets(
 
     def apply_presets_t2i(preset: str):
         target_values = list(t2i_presets[preset].values())
-        idx = TABS.get(preset, None)
-        if idx is not None:
+        if (idx := TABS.get(preset, None)) is not None:
             target_values[idx] = gr.update(selected=target_values[idx])
 
-        return target_values
+        if len(target_values) == 1:
+            return target_values[0]
+        else:
+            return target_values
 
     for name, configs in t2i_presets.items():
-        BUTTON = t2i_buttons[name]
+        button = t2i_buttons[name]
 
         target_components: list[str] = [
             valid_components[elem_id] for elem_id in configs.keys()
@@ -72,9 +74,9 @@ def apply_presets(
             if isinstance(comp, Tabs):
                 TABS[name] = i
 
-        BUTTON.click(
+        button.click(
             fn=apply_presets_t2i,
-            inputs=BUTTON,
+            inputs=button,
             outputs=target_components,
             show_progress="hidden",
         )
@@ -82,21 +84,23 @@ def apply_presets(
         if name in t2i_triggers.keys():
             valid_components[t2i_triggers[name]].click(
                 fn=apply_presets_t2i,
-                inputs=BUTTON,
+                inputs=button,
                 outputs=target_components,
                 show_progress="hidden",
             )
 
     def apply_presets_i2i(preset: str):
         target_values = list(i2i_presets[preset].values())
-        idx = TABS.get(preset, None)
-        if idx is not None:
+        if (idx := TABS.get(preset, None)) is not None:
             target_values[idx] = gr.update(selected=target_values[idx])
 
-        return target_values
+        if len(target_values) == 1:
+            return target_values[0]
+        else:
+            return target_values
 
     for name, configs in i2i_presets.items():
-        BUTTON = i2i_buttons[name]
+        button = i2i_buttons[name]
 
         target_components: list[str] = [
             valid_components[elem_id] for elem_id in configs.keys()
@@ -106,9 +110,9 @@ def apply_presets(
             if isinstance(comp, Tabs):
                 TABS[name] = i
 
-        BUTTON.click(
+        button.click(
             fn=apply_presets_i2i,
-            inputs=BUTTON,
+            inputs=button,
             outputs=target_components,
             show_progress="hidden",
         )
@@ -116,7 +120,7 @@ def apply_presets(
         if name in i2i_triggers.keys():
             valid_components[i2i_triggers[name]].click(
                 fn=apply_presets_i2i,
-                inputs=BUTTON,
+                inputs=button,
                 outputs=target_components,
                 show_progress="hidden",
             )
@@ -125,6 +129,7 @@ def apply_presets(
         print(f"[Yapping] Hooked {preset_count} Presets")
     if (trigger_count := len(t2i_triggers) + len(i2i_triggers)) > 0:
         print(f"[Yapping] Hooked {trigger_count} Triggers")
+
     HOOKED = True
 
 
